@@ -6,7 +6,7 @@
     <form>
       <van-cell-group>
         <van-field
-          v-model="user.account"
+          v-model="user.mobile"
           required
           clearable
           label="用户名"
@@ -16,26 +16,34 @@
         />
         <van-field v-model="user.code" type="password" label="密码" placeholder="请输入密码" required />
       </van-cell-group>
-      <van-button type="info" @click.prevent="headleLogin">信息按钮</van-button>
+      <van-button type="info" @click.prevent="headleLogin">登陆</van-button>
     </form>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   name: 'AppLogin',
   data () {
     return {
       user: {
-        account: '',
-        code: ''
+        mobile: '15097317238',
+        code: '246810'
       }
     }
   },
   methods: {
-    headleLogin () {}
+    async headleLogin () {
+      // console.log(111)
+      const res = await axios({
+        method: 'POST',
+        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
+        data: this.user
+      })
+      console.log(res)
+    }
   }
 }
 </script>
