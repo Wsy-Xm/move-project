@@ -14,7 +14,13 @@
           placeholder="请输入手机号"
           @click-right-icon="$toast('请输入输入号')"
         />
-        <van-field v-model="user.code" center clearable  left-icon="comment-o" placeholder="请输入短信验证码">
+        <van-field
+          v-model="user.code"
+          center
+          clearable
+          left-icon="comment-o"
+          placeholder="请输入短信验证码"
+        >
           <van-button slot="button" size="small" type="default" round>获取验证码</van-button>
         </van-field>
         <van-cell-group></van-cell-group>
@@ -27,25 +33,35 @@
 <script>
 import axios from 'axios'
 
+import { Toast } from 'vant'
+
 export default {
   name: 'AppLogin',
   data () {
     return {
       user: {
         mobile: '15097317238',
-        code: '246810'
+        code: '123456'
       }
     }
   },
   methods: {
     async headleLogin () {
-      // console.log(111)
-      const res = await axios({
-        method: 'POST',
-        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-        data: this.user
-      })
-      console.log(res)
+      try {
+        console.log(111)
+        const res = await axios({
+          method: 'POST',
+          url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
+          data: this.user
+        })
+        console.log(res)
+        Toast.success('登陆成功')
+        this.$router.push({
+          path: '/home'
+        })
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
