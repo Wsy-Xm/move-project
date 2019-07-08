@@ -5,9 +5,12 @@ import router from './router'
 import store from './store'
 import Vant from 'vant'
 import 'vant/lib/index.css'
+// 引入vant
+
+// 引入全局样式
+import '@/styles/index.less'
 
 Vue.use(Vant)
-// 引入vant
 
 Vue.config.productionTip = false
 
