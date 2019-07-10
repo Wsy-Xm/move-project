@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import { login } from '@/api/user'
 
 import { Toast } from 'vant'
 
@@ -47,20 +48,17 @@ export default {
   },
   methods: {
     async headleLogin () {
+      // console.log(login)
       try {
-        console.log(111)
-        const res = await axios({
-          method: 'POST',
-          url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-          data: this.user
-        })
-        console.log(res)
+        const data = await login(this.user)
+        console.log(data)
         Toast.success('登陆成功')
-        this.$router.push({
-          path: '/'
-        })
+        // this.$router.push({
+        //   path: '/'
+        // })
       } catch (err) {
         console.log(err)
+        console.log('登陆失败')
       }
     }
   }
