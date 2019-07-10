@@ -1,12 +1,20 @@
 <template>
   <div class="box">
-    <!-- <van-nav-bar> -->
-    <!-- <van-icon name="search" slot="right" /> -->
-
-    <!-- </van-nav-bar> -->
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <van-search placeholder="请输入搜索关键词" v-model="value" />
-    </van-pull-refresh>
+    <div class="home">
+      <van-nav-bar title="首页" left-arrow fixed/>
+      <van-tabs v-model="active">
+        <van-tab title="推荐">
+          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+              <van-cell v-for="item in list" :key="item" :title="item" />
+            </van-list>
+          </van-pull-refresh>
+        </van-tab>
+        <van-tab title="热门话题">内容 2</van-tab>
+        <van-tab title="科技动态">内容 3</van-tab>
+        <van-tab title="区块链">内容 4</van-tab>
+      </van-tabs>
+    </div>
   </div>
 </template>
 
@@ -15,12 +23,13 @@ export default {
   name: 'AppHome',
   data () {
     return {
-      value: '',
-      isLoading: false
+      active: 0,
+      count: 0,
+      isLoading: false,
+      list: [],
+      loading: false,
+      finished: false
     }
-  },
-  created () {
-
   },
   methods: {
     onRefresh () {
@@ -28,6 +37,21 @@ export default {
         this.$toast('刷新成功')
         this.isLoading = false
         this.count++
+      }, 1000)
+    },
+    onLoad () {
+      // 异步更新数据
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1)
+        }
+        // 加载状态结束
+        this.loading = false
+
+        // 数据全部加载完成
+        if (this.list.length >= 40) {
+          this.finished = true
+        }
       }, 500)
     }
   }
@@ -35,15 +59,10 @@ export default {
 </script>
 
 <style lang="less">
-.box,
-.van-pull-refresh,
-.van-pull-refresh__track {
-  height: 100%;
+.van-tabs--line {
+  margin-top: 92px;
 }
-.van-search {
-  background: #3296fa !important;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+.van-tabs__content {
+  margin-top: 8px;
 }
 </style>

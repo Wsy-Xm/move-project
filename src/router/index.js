@@ -6,9 +6,15 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      name: 'home',
       path: '/',
-      component: () => import('@/views/home/index.vue') // 主页home
+      component: () => import('@/views/tabbar-layout'),
+      children: [
+        {
+          name: 'home',
+          path: '',
+          component: () => import('@/views/home') // 主页home
+        }
+      ]
     },
     {
       name: 'login',

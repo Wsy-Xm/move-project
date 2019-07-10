@@ -11,12 +11,12 @@
 
 const USER_KEY = 'user'
 
-// 存储
+// 查询
 export const getUser = () => {
-  JSON.parse(window.localStorage.getItem(USER_KEY))
+  return JSON.parse(window.localStorage.getItem(USER_KEY))
 }
 
-// 修改
+// 添加
 export const setUser = (data) => {
   window.localStorage.setItem(USER_KEY, JSON.stringify(data))
 }

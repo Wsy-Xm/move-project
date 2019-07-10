@@ -48,14 +48,15 @@ export default {
   },
   methods: {
     async headleLogin () {
-      // console.log(login)
+      console.log(login)
       try {
         const data = await login(this.user)
         console.log(data)
         Toast.success('登陆成功')
-        // this.$router.push({
-        //   path: '/'
-        // })
+        this.$store.commit('setUser', data)
+        this.$router.push({
+          path: '/'
+        })
       } catch (err) {
         console.log(err)
         console.log('登陆失败')
