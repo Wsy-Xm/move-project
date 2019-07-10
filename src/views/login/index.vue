@@ -57,7 +57,7 @@ export default {
         console.log(res)
         Toast.success('登陆成功')
         this.$router.push({
-          path: '/home'
+          path: '/'
         })
       } catch (err) {
         console.log(err)
