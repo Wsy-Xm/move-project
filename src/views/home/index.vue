@@ -100,9 +100,15 @@ export default {
             console.log('获取用户频道列表失败')
           }
         }
-        // 加载出来的列表给channels循环
-        this.channels = channels
       }
+      channels.forEach(item => {
+        item.article = [] // 用来存储当前文章列表
+        item.downPullLoading = false // 控制当前频道的下拉刷新Loading状态
+        item.upPullLoading = false // 控制当前频道的上拉加载更多Loading状态
+        item.upPullFinished = false // 控制列表是否加载完成
+      })
+      // 加载出来的列表给channels循环
+      this.channels = channels
     }
   }
 }
