@@ -19,6 +19,8 @@
 </template>
 
 <script>
+// import { getUserChannels } from '@/api/channels'
+
 export default {
   name: 'AppHome',
   data () {
