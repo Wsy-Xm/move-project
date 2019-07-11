@@ -16,7 +16,10 @@
 </template>
 
 <script>
+// 用户频道列表
 import { getUserChannels } from '@/api/channels'
+// 频道新闻推荐
+import { getArticle } from '@/api/article'
 
 // 把封装的本地存储全部引进来
 import * as auth from '@/utils/auth'
@@ -36,9 +39,18 @@ export default {
       channels: [] // 用户频道列表
     }
   },
+  computed: {
+    // 获取当前选中的列表页
+    channelsActive () {
+      return this.channels[this.active]
+    }
+  },
   created () {
     // 加载用户频道列表
     this.loadChannels()
+
+    // 加载频道新闻推荐
+    // this.loadArticles()
   },
   mounted () {},
   methods: {
@@ -52,19 +64,20 @@ export default {
     },
     // 下拉加载
     onLoad () {
+      this.loadArticles()
       // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
+      // setTimeout(() => {
+      //   for (let i = 0; i < 10; i++) {
+      //     this.list.push(this.list.length + 1)
+      //   }
+      //   // 加载状态结束
+      //   this.loading = false
 
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+      //   // 数据全部加载完成
+      //   if (this.list.length >= 40) {
+      //     this.finished = true
+      //   }
+      // }, 500)
     },
     // 加载用户频道列表
     async loadChannels () {
@@ -110,7 +123,24 @@ export default {
       // 加载出来的列表给channels循环
       this.channels = channels
       console.log(this.channels)
+    },
+    // 加载文章
+    async loadArticles () {
+      try {
+        console.log(this.channelsActive.id)
+        // console.log(this.channels)
+        const data = await getArticle({
+          channelId: this.channelsActive.id,
+          timestamp: Date.now(),
+          withTop: 1
+        })
+        console.log(data)
+      } catch (err) {
+        console.log(err)
+        console.log('文章加载失败')
+      }
     }
+
   }
 }
 </script>
