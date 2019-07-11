@@ -109,6 +109,7 @@ export default {
       })
       // 加载出来的列表给channels循环
       this.channels = channels
+      console.log(this.channels)
     }
   }
 }
