@@ -56,7 +56,7 @@ export default {
       try {
         // 登陆请求
         const data = await login(this.user)
-        console.log(data)
+        // console.log(data)
         Toast.success('登陆成功')
         // 吧toke给容器赋值
         this.$store.commit('setUser', data)

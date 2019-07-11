@@ -12,8 +12,8 @@
 const USER_KEY = 'user'
 
 // 查询
-export const getUser = () => {
-  return JSON.parse(window.localStorage.getItem(USER_KEY))
+export const getUser = (user) => {
+  return JSON.parse(window.localStorage.getItem(user))
 }
 
 // 添加
@@ -22,6 +22,6 @@ export const setUser = (data) => {
 }
 
 // 删除
-export const removeUser = () => {
-  window.localStorage.removeItem(USER_KEY)
+export const removeUser = (user) => {
+  window.localStorage.removeItem(user)
 }

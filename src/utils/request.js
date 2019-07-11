@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // 引入容器
-import store from '@/store/index'
+import store from '@/store'
 
 const request = axios.create({
   // 线上地址
