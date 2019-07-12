@@ -41,6 +41,14 @@ export default {
       channels: [] // 用户频道列表
     }
   },
+  watch: {
+    // 监听用户是否登陆
+    async '$store.state.user'() {
+      this.loadChannels()
+      this.upPullLoading = true
+      await this.onLoad()
+    }
+  },
   computed: {
     // 获取当前选中的列表页
     channelsActive() {
