@@ -73,6 +73,8 @@ export default {
     },
     // 下拉加载
     async onLoad() {
+      // 控制下拉每次延迟800毫秒
+      await this.$sleep(800)
       // console.log('下拉加载成功')
       let data = [] // 获取文章
       // 调用文章列表

@@ -16,6 +16,15 @@ Vue.use(Vant)
 
 Vue.config.productionTip = false
 
+// 定时器
+Vue.prototype.$sleep = time => {
+  return new Promise((resolve, reject) => {
+    window.setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
+
 new Vue({
   router,
   store,
