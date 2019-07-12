@@ -6,8 +6,17 @@
     <van-tabs v-model="active">
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-          <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="item in list" :key="item" :title="item" />
+          <van-list
+            v-model="channelsActive.upPullLoading"
+            :finished="channelsActive.upPullFinished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell
+              v-for="articleItem in channelsActive.article"
+              :key="articleItem.art_id"
+              :title="articleItem.title"
+            />
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -26,7 +35,7 @@ import * as auth from '@/utils/auth'
 
 export default {
   name: 'AppHome',
-  data () {
+  data() {
     return {
       active: 0, // tab切换默认
       // 刷新
@@ -41,21 +50,21 @@ export default {
   },
   computed: {
     // 获取当前选中的列表页
-    channelsActive () {
+    channelsActive() {
       return this.channels[this.active]
     }
   },
-  created () {
+  created() {
     // 加载用户频道列表
     this.loadChannels()
 
     // 加载频道新闻推荐
     // this.loadArticles()
   },
-  mounted () {},
+  mounted() {},
   methods: {
     // 上拉刷新
-    onRefresh () {
+    onRefresh() {
       setTimeout(() => {
         this.$toast('刷新成功')
         this.isLoading = false
@@ -63,24 +72,37 @@ export default {
       }, 1000)
     },
     // 下拉加载
-    onLoad () {
-      this.loadArticles()
-      // 异步更新数据
-      // setTimeout(() => {
-      //   for (let i = 0; i < 10; i++) {
-      //     this.list.push(this.list.length + 1)
-      //   }
-      //   // 加载状态结束
-      //   this.loading = false
+    async onLoad() {
+      // console.log('下拉加载成功')
+      let data = [] // 获取文章
+      // 调用文章列表
+      data = await this.loadArticles()
+      // console.log(data)
 
-      //   // 数据全部加载完成
-      //   if (this.list.length >= 40) {
-      //     this.finished = true
-      //   }
-      // }, 500)
+      // 判断数据是否加载完毕
+      if (!data.pre_timestamp && !data.results.length) {
+        // 加载完成
+        this.channelsActive.upPullFinished = true
+        // loading取消
+        this.channelsActive.upPullLoading = false
+        return
+      }
+
+      // 判断时候有新的数据
+      if (data.pre_timestamp && !data.results.length) {
+        this.channelsActive.timestamp = data.pre_timestamp
+        // 加载下一页数据
+        data = await this.loadArticles()
+      }
+      // 显示成功以后记录下一次的时间戳
+      this.channelsActive.timestamp = data.pre_timestamp
+      // 将数据更新到文章频道中
+      this.channelsActive.article.push(...data.results)
+      this.channelsActive.upPullLoading = false
+      // console.log(data)
     },
     // 加载用户频道列表
-    async loadChannels () {
+    async loadChannels() {
       // 接收容器token值
       let channels = []
       const { user } = this.$store.state
@@ -116,31 +138,30 @@ export default {
       }
       channels.forEach(item => {
         item.article = [] // 用来存储当前文章列表
+        item.timestamp = Date.now() // 用来存储下一次的时间戳
         item.downPullLoading = false // 控制当前频道的下拉刷新Loading状态
         item.upPullLoading = false // 控制当前频道的上拉加载更多Loading状态
         item.upPullFinished = false // 控制列表是否加载完成
       })
       // 加载出来的列表给channels循环
       this.channels = channels
-      console.log(this.channels)
+      // console.log(this.channels)
     },
     // 加载文章
-    async loadArticles () {
+    async loadArticles() {
       try {
-        console.log(this.channelsActive.id)
-        // console.log(this.channels)
+        const { id: channelId, timestamp } = this.channelsActive
         const data = await getArticle({
-          channelId: this.channelsActive.id,
-          timestamp: Date.now(),
-          withTop: 1
+          channelId, // 频道ID
+          timestamp,
+          withTop: 1 // 是否包含置顶 0 否 1 是
         })
-        console.log(data)
+        return data
       } catch (err) {
         console.log(err)
         console.log('文章加载失败')
       }
     }
-
   }
 }
 </script>
@@ -151,5 +172,9 @@ export default {
 }
 .van-tabs__content {
   margin-top: 8px;
+}
+.van-tabs /deep/ .van-tabs__wrap {
+  position: fixed;
+  margin-top: 92px;
 }
 </style>
