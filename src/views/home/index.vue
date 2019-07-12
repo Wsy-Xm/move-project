@@ -5,7 +5,7 @@
     <!-- 顶部tab切换 -->
     <van-tabs v-model="active">
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
-        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-pull-refresh v-model="channelsActive.downPullLoading" @refresh="onRefresh">
           <van-list
             v-model="channelsActive.upPullLoading"
             :finished="channelsActive.upPullFinished"
@@ -38,13 +38,6 @@ export default {
   data() {
     return {
       active: 0, // tab切换默认
-      // 刷新
-      count: 0,
-      isLoading: false,
-      list: [],
-      loading: false,
-      finished: false,
-      // 刷新
       channels: [] // 用户频道列表
     }
   },
@@ -63,15 +56,32 @@ export default {
   },
   mounted() {},
   methods: {
-    // 上拉刷新
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-        this.count++
-      }, 1000)
+    // 下拉刷新
+    async onRefresh() {
+      await this.$sleep(800)
+      const { channelsActive } = this
+      // 记录上次的时间戳 如果没有最新的数据还是加载上次的时间戳
+      const timestamp = channelsActive.timestamp
+      // 获取最新的时间戳
+      channelsActive.timestamp = Date.now()
+      // 加载文章
+      let data = []
+      data = await this.loadArticles()
+      // console.log(data)
+      // 判断是否有最新的数据
+      if (data.results.length === 0) {
+        console.log(1111)
+        channelsActive.timestamp = timestamp
+        data = await this.loadArticles()
+        console.log(data)
+        this.onLoad()
+      }
+      console.log(data)
+      channelsActive.article = data.results
+      channelsActive.downPullLoading = false
+      this.$toast('刷新成功')
     },
-    // 下拉加载
+    // 上拉加载
     async onLoad() {
       // 控制下拉每次延迟800毫秒
       await this.$sleep(800)
