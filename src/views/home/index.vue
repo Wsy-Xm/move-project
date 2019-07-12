@@ -4,6 +4,9 @@
     <van-nav-bar title="首页" left-arrow fixed />
     <!-- 顶部tab切换 -->
     <van-tabs v-model="active">
+      <div slot="nav-right" class="bread">
+        <van-icon name="wap-nav" />
+      </div>
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <van-pull-refresh v-model="channelsActive.downPullLoading" @refresh="onRefresh">
           <van-list
@@ -196,5 +199,12 @@ export default {
 .van-tabs /deep/ .van-tabs__wrap {
   position: fixed;
   margin-top: 92px;
+}
+.bread {
+  position: fixed;
+  right: 0;
+  top: 110px;
+  background: #fff;
+  width: 64px;
 }
 </style>
