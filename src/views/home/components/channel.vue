@@ -14,11 +14,9 @@
         <van-button round type="danger" size="mini">编辑</van-button>
       </div>
       <van-grid :gutter="10">
-        <van-grid-item
-          v-for="channelsItem in channels"
-          :key="channelsItem.id"
-          :text="channelsItem.name"
-        />
+        <van-grid-item v-for="(channelsItem,index) in channels" :key="channelsItem.id">
+          <span slot="text" :class="{active:active===index}" id="fzi">{{ channelsItem.name }}</span>
+        </van-grid-item>
       </van-grid>
     </van-popup>
   </div>
@@ -34,6 +32,10 @@ export default {
     },
     channels: {
       type: Array
+    },
+    active: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -64,7 +66,13 @@ export default {
   align-items: center;
   .van-button--danger {
     background: #fff;
-    color: red
+    color: red;
   }
+}
+.active {
+  color: red;
+}
+#fzi {
+  font-size: 12px;
 }
 </style>

@@ -27,7 +27,7 @@
     </van-tabs>
     <!-- 引入组件 -->
     <!-- <channel :value="isChannelShow" @input="ff"></channel> -->
-    <channel v-model="isChannelShow" :channels="channels"></channel>
+    <channel v-model="isChannelShow" :channels="channels" :active="active"></channel>
   </div>
 </template>
 
