@@ -29,7 +29,7 @@
           >
             <div slot="text" :class="{active:active===index}" id="fzi">
               {{ channelsItem.name }}
-              <van-icon name="close" v-show="isEdit" class="delicon" />
+              <van-icon name="close" v-show="isEdit && channelsItem.name !== '推荐'" class="delicon" />
             </div>
           </van-grid-item>
         </van-grid>
@@ -138,6 +138,9 @@ export default {
     delUserChannels(item, index) {
       // console.log(item, index)
       // console.log('删除')
+      if (item.name === '推荐') {
+        return
+      }
       const { user } = this.$store.state
       if (user) {
       } else {
