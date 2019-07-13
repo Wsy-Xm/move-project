@@ -9,7 +9,7 @@
 
 // export const removeUser = () => window.localStorage.removeItem(USER_KEY)
 
-const USER_KEY = 'user'
+// const USER_KEY = 'user'
 
 // 查询
 export const getUser = (user) => {
@@ -17,8 +17,8 @@ export const getUser = (user) => {
 }
 
 // 添加
-export const setUser = (data) => {
-  window.localStorage.setItem(USER_KEY, JSON.stringify(data))
+export const setUser = (item, data) => {
+  window.localStorage.setItem(item, JSON.stringify(data))
 }
 
 // 删除

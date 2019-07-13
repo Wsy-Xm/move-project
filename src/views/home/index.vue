@@ -60,6 +60,8 @@ export default {
       this.loadChannels()
       this.upPullLoading = true
       await this.onLoad()
+      this.upPullLoading = true
+      await this.onLoad()
     }
   },
   computed: {

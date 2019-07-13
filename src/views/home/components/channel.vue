@@ -30,9 +30,10 @@
             <small>点击添加频道</small>
           </div>
           <van-grid-item
-            v-for="allChannels in allChannels"
+            v-for="allChannels in screenChannels"
             :key="allChannels.id"
             :text="allChannels.name"
+            @click="headleAddChannels(allChannels)"
           />
         </van-grid>
       </div>
@@ -43,6 +44,9 @@
 <script>
 // 加载所有的频道列表
 import { getAllChannels } from '@/api/channels'
+
+// 把封装的本地存储全部引进来
+import * as auth from '@/utils/auth'
 
 export default {
   name: 'channelPopup',
@@ -67,6 +71,12 @@ export default {
       allChannels: []
     }
   },
+  computed: {
+    screenChannels() {
+      const duplicates = this.channels.map(item => item.id)
+      return this.allChannels.filter(item => !duplicates.includes(item.id))
+    }
+  },
   created() {
     // 加载所有的频道列表
     this.loadAllchannels()
@@ -81,6 +91,19 @@ export default {
       } catch (err) {
         console.log(err)
         console.log('全部频道列表加载失败')
+      }
+    },
+    // 推荐频道添加
+    headleAddChannels(item) {
+      console.log(item)
+      this.channels.push(item)
+      // 判断时候是登陆状态
+      const { user } = this.$store.state
+      if (user) {
+
+      } else {
+        console.log(this.channels)
+        auth.setUser('channels', this.channels)
       }
     }
   }
