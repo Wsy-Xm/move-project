@@ -14,11 +14,23 @@
             我的频道
             <small>点击进入频道</small>
           </div>
-          <van-button round type="danger" size="mini">编辑</van-button>
+          <van-button
+            round
+            type="danger"
+            size="mini"
+            @click="isEdit = !isEdit"
+          >{{ isEdit ? '完成':'编辑' }}</van-button>
         </div>
         <van-grid :gutter="10">
-          <van-grid-item v-for="(channelsItem,index) in channels" :key="channelsItem.id">
-            <span slot="text" :class="{active:active===index}" id="fzi">{{ channelsItem.name }}</span>
+          <van-grid-item
+            v-for="(channelsItem,index) in channels"
+            :key="channelsItem.id"
+            @click="userChannels(channelsItem,index)"
+          >
+            <div slot="text" :class="{active:active===index}" id="fzi">
+              {{ channelsItem.name }}
+              <van-icon name="close" v-show="isEdit" class="delicon" />
+            </div>
           </van-grid-item>
         </van-grid>
       </div>
@@ -68,7 +80,8 @@ export default {
   },
   data() {
     return {
-      allChannels: []
+      allChannels: [], // 所有的频道列表
+      isEdit: false
     }
   },
   computed: {
@@ -100,11 +113,35 @@ export default {
       // 判断时候是登陆状态
       const { user } = this.$store.state
       if (user) {
-
       } else {
         console.log(this.channels)
         auth.setUser('channels', this.channels)
       }
+    },
+    // 用户频道编辑
+    userChannels(item, index) {
+      if (this.isEdit) {
+        // 编辑状态
+        this.delUserChannels(item, index)
+      } else {
+        // 完成跳转
+        this.skipChannels(item, index)
+      }
+    },
+    delUserChannels(item, index) {
+      console.log(item, index)
+      console.log('删除')
+      const { user } = this.$store.state
+      if (user) {
+
+      } else {
+        this.channels.splice(index, 1)
+        auth.setUser('channels', this.channels)
+      }
+    },
+    skipChannels(item, index) {
+      console.log(item, index)
+      console.log('跳转')
     }
   }
 }
@@ -137,6 +174,15 @@ export default {
   }
   .van-grid-item /deep/ .van-grid-item__content {
     background: #eee !important;
+  }
+  .van-grid-item {
+    position: relative;
+    .delicon {
+      position: absolute;
+      top: -9px;
+      right: -6px;
+      font-size: 18px;
+    }
   }
 }
 // .van-grid-item /deep/ .van-grid-item__content {
