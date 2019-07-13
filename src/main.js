@@ -25,6 +25,8 @@ Vue.prototype.$sleep = time => {
   })
 }
 
+Vue.prototype.$text = '测试ptototype'
+
 new Vue({
   router,
   store,

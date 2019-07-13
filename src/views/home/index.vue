@@ -1,10 +1,11 @@
 <template>
   <div class="home">
     <!-- head顶部 -->
+    <div>1213</div>
     <van-nav-bar title="首页" left-arrow fixed />
     <!-- 顶部tab切换 -->
     <van-tabs v-model="active">
-      <div slot="nav-right" class="bread">
+      <div slot="nav-right" class="bread" @click="isChannelShow = true">
         <van-icon name="wap-nav" />
       </div>
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
@@ -24,6 +25,9 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+    <!-- 引入组件 -->
+    <!-- <channel :value="isChannelShow" @input="ff"></channel> -->
+    <channel v-model="isChannelShow" :channels="channels"></channel>
   </div>
 </template>
 
@@ -32,16 +36,22 @@
 import { getUserChannels } from '@/api/channels'
 // 频道新闻推荐
 import { getArticle } from '@/api/article'
+// 加载组件
+import channel from './components/channel'
 
 // 把封装的本地存储全部引进来
 import * as auth from '@/utils/auth'
 
 export default {
   name: 'AppHome',
+  components: {
+    channel
+  },
   data() {
     return {
       active: 0, // tab切换默认
-      channels: [] // 用户频道列表
+      channels: [], // 用户频道列表
+      isChannelShow: false // 控制弹出层
     }
   },
   watch: {
@@ -61,11 +71,7 @@ export default {
   created() {
     // 加载用户频道列表
     this.loadChannels()
-
-    // 加载频道新闻推荐
-    // this.loadArticles()
   },
-  mounted() {},
   methods: {
     // 下拉刷新
     async onRefresh() {
@@ -81,13 +87,12 @@ export default {
       // console.log(data)
       // 判断是否有最新的数据
       if (data.results.length === 0) {
-        console.log(1111)
         channelsActive.timestamp = timestamp
         data = await this.loadArticles()
-        console.log(data)
+        // console.log(data)
         this.onLoad()
       }
-      console.log(data)
+      // console.log(data)
       channelsActive.article = data.results
       channelsActive.downPullLoading = false
       this.$toast('刷新成功')
@@ -168,7 +173,7 @@ export default {
       })
       // 加载出来的列表给channels循环
       this.channels = channels
-      // console.log(this.channels)
+      console.log(this.channels)
     },
     // 加载文章
     async loadArticles() {
@@ -191,10 +196,7 @@ export default {
 
 <style lang="less">
 .van-tabs--line {
-  margin-top: 92px;
-}
-.van-tabs__content {
-  margin-top: 8px;
+  margin-top: 30px;
 }
 .van-tabs /deep/ .van-tabs__wrap {
   position: fixed;
@@ -206,5 +208,12 @@ export default {
   top: 110px;
   background: #fff;
   width: 64px;
+  .van-icon {
+    display: flex;
+    justify-content: center;
+  }
+}
+.van-tabs__nav:last-of-type {
+  margin-right: 50px;
 }
 </style>
