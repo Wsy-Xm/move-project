@@ -26,8 +26,14 @@
       </van-tab>
     </van-tabs>
     <!-- 引入组件 -->
+    <!-- 这个相当于下面的 v-model="isChannelShow" 复杂写法 -->
     <!-- <channel :value="isChannelShow" @input="ff"></channel> -->
-    <channel v-model="isChannelShow" :channels="channels" :active="active"></channel>
+
+    <!-- :active.sync="active" -->
+    <!-- 相当于下面的两个的缩写 -->
+    <!-- @update:active="active = $event" -->
+    <!-- :active="active" -->
+    <channel v-model="isChannelShow" :channels="channels" :active.sync="active"></channel>
   </div>
 </template>
 

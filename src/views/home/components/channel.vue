@@ -129,19 +129,20 @@ export default {
       }
     },
     delUserChannels(item, index) {
-      console.log(item, index)
-      console.log('删除')
+      // console.log(item, index)
+      // console.log('删除')
       const { user } = this.$store.state
       if (user) {
-
       } else {
         this.channels.splice(index, 1)
         auth.setUser('channels', this.channels)
       }
     },
     skipChannels(item, index) {
-      console.log(item, index)
-      console.log('跳转')
+      // console.log(item, index)
+      // console.log('跳转')
+      this.$emit('update:active', index)
+      this.$emit('input', false)
     }
   }
 }
