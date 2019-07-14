@@ -39,7 +39,7 @@
                 </div>
                 <!-- 反馈图标按钮 -->
                 <div>
-                  <van-icon name="cross" />
+                  <van-icon name="cross" @click="feedbackIsSShow = true" />
                 </div>
               </div>
               <div></div>
@@ -60,7 +60,7 @@
     <channel v-model="isChannelShow" :channels="channels" :active.sync="active"></channel>
 
     <!-- 反馈组件 -->
-    <feedbackContent></feedbackContent>
+    <feedbackContent v-model="feedbackIsSShow"></feedbackContent>
   </div>
 </template>
 
@@ -91,7 +91,7 @@ export default {
       active: 0, // tab切换默认
       channels: [], // 用户频道列表
       isChannelShow: false, // 控制弹出层
-      date: Date.now()
+      feedbackIsSShow: false // 控制反馈的弹出框
     }
   },
   watch: {
