@@ -15,7 +15,10 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-cell v-for="articleItem in channelsActive.article" :key="articleItem.art_id">
+            <van-cell
+              v-for="articleItem in channelsActive.article"
+              :key="articleItem.art_id.toString()"
+            >
               <div>{{articleItem.title}}</div>
               <template v-if="articleItem.cover.images.length !== 0">
                 <van-image
