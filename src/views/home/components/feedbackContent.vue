@@ -28,6 +28,7 @@
 </template>
 
 <script>
+// import { dislikeArticle } from '@/api/article'
 export default {
   name: 'feedbackContent',
   props: {
