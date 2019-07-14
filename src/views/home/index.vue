@@ -24,7 +24,9 @@
                   v-for="(imgItem,index) in articleItem.cover.images"
                   :key="index"
                   :src="imgItem"
-                />
+                >
+                  <template v-slot:error>加载失败</template>
+                </van-image>
               </template>
               <div class="articletext">
                 <!-- 作者 -->
@@ -161,6 +163,7 @@ export default {
       // console.log(user)
       // 判断用户是否登陆
       if (user) {
+        // console.log('登陆了')
         // console.log(getUserChannels)
         try {
           const data = await getUserChannels()
@@ -171,6 +174,7 @@ export default {
           console.log('获取用户频道列表失败')
         }
       } else {
+        // console.log('没登陆')
         // 查询时候有自己设置标签
         // 如果用户没有登陆判断用户时候本地存储有数据
         const loadChannels = auth.getUser('channels')
@@ -198,7 +202,7 @@ export default {
       // 加载出来的列表给channels循环
       this.channels = channels
       // console.log(this.channels)
-      console.log(this.channelsActive.article)
+      // console.log(this.channelsActive.article)
     },
     // 加载文章
     async loadArticles() {
@@ -214,9 +218,6 @@ export default {
         console.log(err)
         console.log('文章加载失败')
       }
-    },
-    headleImg(item) {
-      console.log(item)
     }
   }
 }

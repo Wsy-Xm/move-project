@@ -42,10 +42,10 @@
             <small>点击添加频道</small>
           </div>
           <van-grid-item
-            v-for="allChannels in screenChannels"
+            v-for="(allChannels,index) in screenChannels"
             :key="allChannels.id"
             :text="allChannels.name"
-            @click="headleAddChannels(allChannels)"
+            @click="headleAddChannels(allChannels,index)"
           />
         </van-grid>
       </div>
@@ -55,7 +55,7 @@
 
 <script>
 // 加载所有的频道列表
-import { getAllChannels } from '@/api/channels'
+import { getAllChannels, amendChannels, delUserChannels } from '@/api/channels'
 
 // 把封装的本地存储全部引进来
 import * as auth from '@/utils/auth'
@@ -114,14 +114,16 @@ export default {
       }
     },
     // 推荐频道添加
-    headleAddChannels(item) {
+    async headleAddChannels(item, index) {
       console.log(item)
       this.channels.push(item)
       // 判断时候是登陆状态
       const { user } = this.$store.state
       if (user) {
+        const data = [{ id: item.id, seq: index }]
+        await amendChannels(data)
       } else {
-        console.log(this.channels)
+        // console.log(this.channels)
         auth.setUser('channels', this.channels)
       }
     },
@@ -135,7 +137,7 @@ export default {
         this.skipChannels(item, index)
       }
     },
-    delUserChannels(item, index) {
+    async delUserChannels(item, index) {
       // console.log(item, index)
       // console.log('删除')
       if (item.name === '推荐') {
@@ -143,11 +145,14 @@ export default {
       }
       const { user } = this.$store.state
       if (user) {
+        await delUserChannels(item.id)
+        // console.log(data)
       } else {
         this.channels.splice(index, 1)
         auth.setUser('channels', this.channels)
       }
     },
+    // 点击挑战频道
     skipChannels(item, index) {
       // console.log(item, index)
       // console.log('跳转')
