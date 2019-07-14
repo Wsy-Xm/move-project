@@ -28,13 +28,19 @@
                   <template v-slot:error>加载失败</template>
                 </van-image>
               </template>
-              <div class="articletext">
-                <!-- 作者 -->
-                <span>{{articleItem.aut_name}}</span>
-                <!-- 评论数量 -->
-                <span>{{articleItem.comm_count + '评论'}}</span>
-                <!-- 时间 -->
-                <span>{{articleItem.pubdate | dateTime}}</span>
+              <div class="boxArticletext">
+                <div class="articletext">
+                  <!-- 作者 -->
+                  <span>{{articleItem.aut_name}}</span>
+                  <!-- 评论数量 -->
+                  <span>{{articleItem.comm_count + '评论'}}</span>
+                  <!-- 时间 -->
+                  <span>{{articleItem.pubdate | dateTime}}</span>
+                </div>
+                <!-- 反馈图标按钮 -->
+                <div>
+                  <van-icon name="cross" />
+                </div>
               </div>
               <div></div>
             </van-cell>
@@ -50,7 +56,11 @@
     <!-- 相当于下面的两个的缩写 -->
     <!-- @update:active="active = $event" -->
     <!-- :active="active" -->
+    <!-- 频道管理组件 -->
     <channel v-model="isChannelShow" :channels="channels" :active.sync="active"></channel>
+
+    <!-- 反馈组件 -->
+    <feedbackContent></feedbackContent>
   </div>
 </template>
 
@@ -59,8 +69,13 @@
 import { getUserChannels } from '@/api/channels'
 // 频道新闻推荐
 import { getArticle } from '@/api/article'
-// 加载组件
+/**
+ * 加载组件
+ */
+// 频道组件
 import channel from './components/channel'
+// 反馈弹框组件
+import feedbackContent from './components/feedbackContent'
 
 // 把封装的本地存储全部引进来
 import * as auth from '@/utils/auth'
@@ -68,7 +83,8 @@ import * as auth from '@/utils/auth'
 export default {
   name: 'AppHome',
   components: {
-    channel
+    channel,
+    feedbackContent
   },
   data() {
     return {
@@ -251,5 +267,9 @@ export default {
   span {
     margin-left: 15px;
   }
+}
+.boxArticletext {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
