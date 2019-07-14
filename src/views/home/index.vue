@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <!-- head顶部 -->
-    <div>1213</div>
     <van-nav-bar title="首页" left-arrow fixed />
     <!-- 顶部tab切换 -->
     <van-tabs v-model="active">
@@ -16,11 +15,27 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-cell
-              v-for="articleItem in channelsActive.article"
-              :key="articleItem.art_id"
-              :title="articleItem.title"
-            />
+            <van-cell v-for="articleItem in channelsActive.article" :key="articleItem.art_id">
+              <div>{{articleItem.title}}</div>
+              <template v-if="articleItem.cover.images.length !== 0">
+                <van-image
+                  width="100"
+                  height="100"
+                  v-for="(imgItem,index) in articleItem.cover.images"
+                  :key="index"
+                  :src="imgItem"
+                />
+              </template>
+              <div class="articletext">
+                <!-- 作者 -->
+                <span>{{articleItem.aut_name}}</span>
+                <!-- 评论数量 -->
+                <span>{{articleItem.comm_count + '评论'}}</span>
+                <!-- 时间 -->
+                <span>{{articleItem.pubdate | dateTime}}</span>
+              </div>
+              <div></div>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -57,7 +72,8 @@ export default {
     return {
       active: 0, // tab切换默认
       channels: [], // 用户频道列表
-      isChannelShow: false // 控制弹出层
+      isChannelShow: false, // 控制弹出层
+      date: Date.now()
     }
   },
   watch: {
@@ -181,7 +197,8 @@ export default {
       })
       // 加载出来的列表给channels循环
       this.channels = channels
-      console.log(this.channels)
+      // console.log(this.channels)
+      console.log(this.channelsActive.article)
     },
     // 加载文章
     async loadArticles() {
@@ -197,6 +214,9 @@ export default {
         console.log(err)
         console.log('文章加载失败')
       }
+    },
+    headleImg(item) {
+      console.log(item)
     }
   }
 }
@@ -204,7 +224,7 @@ export default {
 
 <style lang="less">
 .van-tabs--line {
-  margin-top: 30px;
+  margin-top: 92px;
 }
 .van-tabs /deep/ .van-tabs__wrap {
   position: fixed;
@@ -223,5 +243,12 @@ export default {
 }
 .van-tabs__nav:last-of-type {
   margin-right: 50px;
+}
+.articletext {
+  font-size: 12px;
+  color: #ccc;
+  span {
+    margin-left: 15px;
+  }
 }
 </style>

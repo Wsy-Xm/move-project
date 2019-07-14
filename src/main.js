@@ -16,6 +16,14 @@ Vue.use(Vant)
 
 Vue.config.productionTip = false
 
+// 处理事件
+var moment = require('moment')
+moment.locale('zh-cn')
+
+Vue.filter('dateTime', function(value) {
+  return moment([value]).fromNow()
+})
+
 // 定时器
 Vue.prototype.$sleep = time => {
   return new Promise((resolve, reject) => {
@@ -24,8 +32,6 @@ Vue.prototype.$sleep = time => {
     }, time)
   })
 }
-
-Vue.prototype.$text = '测试ptototype'
 
 new Vue({
   router,

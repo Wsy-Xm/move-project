@@ -107,7 +107,7 @@ export default {
           item.upPullFinished = false // 控制列表是否加载完成
         })
         this.allChannels = data.channels
-        console.log(data)
+        // console.log(data)
       } catch (err) {
         console.log(err)
         console.log('全部频道列表加载失败')

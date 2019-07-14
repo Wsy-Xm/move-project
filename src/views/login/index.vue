@@ -42,7 +42,7 @@ import { Toast } from 'vant'
 
 export default {
   name: 'AppLogin',
-  data () {
+  data() {
     return {
       user: {
         mobile: '15097317238',
@@ -51,14 +51,14 @@ export default {
     }
   },
   methods: {
-    async headleLogin () {
+    async headleLogin() {
       // console.log(login)
       try {
         // 登陆请求
         const data = await login(this.user)
         // console.log(data)
         Toast.success('登陆成功')
-        // 吧toke给容器赋值
+        // 把toke给容器赋值
         this.$store.commit('setUser', data)
         // 路由跳转
         this.$router.push({
