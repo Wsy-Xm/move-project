@@ -29,6 +29,11 @@ export default new Router({
       name: 'search',
       path: '/search',
       component: () => import('@/views/search') // 搜索页面
+    },
+    {
+      name: 'searchLenovo',
+      path: '/searchLenovo/:q',
+      component: () => import('@/views/SearchLenovo') // 搜索联想跳转页面内容
     }
   ]
 })

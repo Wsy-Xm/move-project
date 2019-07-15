@@ -5,18 +5,24 @@
       <div class="iconBut" @click="$router.push({path:'/'})">
         <van-icon name="arrow-left" />
       </div>
-      <van-search v-model="searchText" placeholder="请输入搜索关键词" show-action shape="round">
+      <!-- <form action="/"> -->
+      <van-search
+        v-model="searchText"
+        placeholder="请输入搜索关键词"
+        show-action
+        shape="round"
+        @search="headleSearchPrice(searchText)"
+      >
         <div slot="action">搜索</div>
       </van-search>
+      <!-- </form> -->
     </div>
     <!-- /搜索框 -->
 
     <!-- 联想建议 -->
     <van-cell-group>
       <van-cell v-for="item in associate" :key="item" icon="search">
-        <div slot="title" v-html="headlHighlight(item,searchText)">
-          <span style="color:red">holle</span>
-        </div>
+        <div slot="title" v-html="headlHighlight(item,searchText)" @click="headleSearchPrice(item)"></div>
       </van-cell>
     </van-cell-group>
     <!-- /联想建议 -->
@@ -58,11 +64,26 @@ export default {
     }, 500)
   },
   methods: {
+    // 处理搜索关键字高亮
     headlHighlight(item, searchText) {
       return item
         .toLowerCase()
         .split(searchText)
         .join(`<span style="color:red">${searchText}</span>`)
+    },
+    // 搜索跳转
+    headleSearchPrice(q) {
+      // console.log(q)
+      if (!q.length) {
+        return
+      }
+      this.$router.push({
+        name: 'searchLenovo',
+        params: {
+          q: q
+        }
+      })
+      // this.$router.push(`/searchLenovo/${q}`)
     }
   }
 }
