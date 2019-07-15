@@ -6,6 +6,7 @@ body,
 .van-nav-bar {
   background: #3296FA;
 }
-.van-nav-bar__title {
+.van-nav-bar__title,
+.van-nav-bar__text {
   color: #fff;
 }
