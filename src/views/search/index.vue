@@ -1,7 +1,14 @@
 <template>
   <div>
     <!-- 搜索框 -->
-    <van-search placeholder="请输入搜索关键词" v-model="searchText" show-action />
+    <div class="headSearch">
+      <div class="iconBut" @click="skipHome">
+        <van-icon name="arrow-left" />
+      </div>
+      <van-search v-model="searchText" placeholder="请输入搜索关键词" show-action shape="round">
+        <div slot="action">搜索</div>
+      </van-search>
+    </div>
     <!-- /搜索框 -->
 
     <!-- 联想建议 -->
@@ -17,6 +24,9 @@
 <script>
 import { associateSearch } from '@/api/search'
 
+// lodash来解决函数防抖
+import { debounce } from 'lodash'
+
 export default {
   name: 'AppSearch',
   data() {
@@ -26,23 +36,42 @@ export default {
     }
   },
   watch: {
-    async searchText(newValue, oldValue) {
+    searchText: debounce(async function(text) {
       //   console.log(newValue, oldValue)
-      newValue = newValue.trim()
-      if (!newValue.length) {
+      text = text.trim()
+      if (!text.length) {
         this.associate = []
         return
       }
       try {
-        const data = await associateSearch(newValue)
+        const data = await associateSearch(text)
         this.associate = data.options
         console.log(data)
       } catch (err) {
         console.log(err)
       }
+    }, 500)
+  },
+  methods: {
+    skipHome() {
+      this.$router.push({
+        path: '/'
+      })
     }
   }
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.headSearch {
+  display: flex;
+  justify-content: space-between;
+  .van-search {
+    flex: 1;
+  }
+  .iconBut {
+    margin-top: 28px;
+    margin-left: 20px;
+  }
+}
+</style>
