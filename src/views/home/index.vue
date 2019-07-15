@@ -42,7 +42,7 @@
                 </div>
                 <!-- 反馈图标按钮 -->
                 <div>
-                  <van-icon name="cross" @click="feedbackIsSShow = true" />
+                  <van-icon name="cross" @click="feedbackButton(articleItem)" />
                 </div>
               </div>
               <div></div>
@@ -63,7 +63,11 @@
     <channel v-model="isChannelShow" :channels="channels" :active.sync="active"></channel>
 
     <!-- 反馈组件 -->
-    <feedbackContent v-model="feedbackIsSShow"></feedbackContent>
+    <feedbackContent
+      v-model="feedbackIsSShow"
+      :dislikeId="dislikeId"
+      @dislikeRemove="dislikeRemove"
+    ></feedbackContent>
   </div>
 </template>
 
@@ -94,7 +98,8 @@ export default {
       active: 0, // tab切换默认
       channels: [], // 用户频道列表
       isChannelShow: false, // 控制弹出层
-      feedbackIsSShow: false // 控制反馈的弹出框
+      feedbackIsSShow: false, // 控制反馈的弹出框
+      dislikeId: null // 用来接受点击按钮的文章ID
     }
   },
   watch: {
@@ -237,6 +242,25 @@ export default {
         console.log(err)
         console.log('文章加载失败')
       }
+    },
+    // 举报反馈
+    feedbackButton(item) {
+      // console.log(item)
+      this.dislikeId = item
+      this.feedbackIsSShow = true
+    },
+    dislikeRemove() {
+      // 获取或有的文章
+      const article = this.channelsActive.article
+      // 获取到不感兴趣的文章ID
+      const dislikeArticleId = article.findIndex(
+        item => item === this.dislikeId
+      )
+      // console.log(dislikeArticleId)
+      // 移除
+      article.splice(dislikeArticleId, 1)
+      // 让弹出层消失
+      this.feedbackIsSShow = false
     }
   }
 }
