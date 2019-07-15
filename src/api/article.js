@@ -32,3 +32,18 @@ export const dislikeArticle = target => {
     }
   })
 }
+
+/**
+ * 举报文章
+ */
+export const informArticle = ({ target, type, remark }) => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/reports',
+    data: {
+      target,
+      type,
+      remark
+    }
+  })
+}
