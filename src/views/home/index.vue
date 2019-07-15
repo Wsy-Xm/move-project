@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- head顶部 -->
-    <van-nav-bar title="首页" left-arrow fixed />
+    <van-nav-bar title="首页" left-arrow fixed @click.native="$router.push({name:'search'})" />
     <!-- 顶部tab切换 -->
     <van-tabs v-model="active">
       <div slot="nav-right" class="bread" @click="isChannelShow = true">
