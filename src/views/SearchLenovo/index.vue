@@ -3,7 +3,34 @@
     <van-nav-bar left-arrow left-text="返回" title="标题" fixed @click-left="$router.back()" />
     <div class="headlist">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <van-cell v-for="item in searchData" :key="item.art_id" :title="item.title" />
+        <van-cell v-for="item in searchData" :key="item.art_id">
+          <div>{{item.title}}</div>
+          <template v-if="item.cover.images.length !== 0">
+            <van-image
+              width="100"
+              height="100"
+              v-for="(item,index) in item.cover.images"
+              :key="index"
+              :src="item"
+            >
+              <template v-slot:error>加载失败</template>
+            </van-image>
+          </template>
+          <div class="boxArticletext">
+            <div class="articletext">
+              <!-- 作者 -->
+              <span>{{item.aut_name}}</span>
+              <!-- 评论数量 -->
+              <span>{{item.comm_count + '评论'}}</span>
+              <!-- 时间 -->
+              <span>{{item.pubdate | dateTime}}</span>
+            </div>
+            <!-- 反馈图标按钮 -->
+            <!-- <div>
+              <van-icon name="cross" @click="feedbackButton(articleItem)" />
+            </div>-->
+          </div>
+        </van-cell>
       </van-list>
     </div>
   </div>
@@ -62,5 +89,12 @@ export default {
 <style lang="less" scoped>
 .headlist {
   margin-top: 96px;
+}
+.articletext {
+  font-size: 12px;
+  color: #ccc;
+  span {
+    margin-left: 15px;
+  }
 }
 </style>

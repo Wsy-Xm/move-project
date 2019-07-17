@@ -28,6 +28,17 @@
     <!-- /联想建议 -->
 
     <!-- 历史记录 -->
+    <van-cell-group v-show="this.associate.length === 0">
+      <div class="headRecord">
+        <div>历史记录</div>
+        <div>
+          <van-icon name="cross" />
+        </div>
+      </div>
+      <van-cell-group>
+        <van-cell v-for="searchItemm in searchHistory" :key="searchItemm" :title="searchItemm" />
+      </van-cell-group>
+    </van-cell-group>
     <!-- /历史记录 -->
   </div>
 </template>
@@ -37,12 +48,16 @@ import { associateSearch } from '@/api/search'
 // lodash来解决函数防抖
 import { debounce } from 'lodash'
 
+// 本地存储全部加载
+import * as auth from '@/utils/auth'
+
 export default {
   name: 'AppSearch',
   data() {
     return {
       searchText: '', // 输入框内容
-      associate: [] // 搜索联想出来的内容
+      associate: [], // 搜索联想出来的内容
+      searchHistory: [] // 历史记录
     }
   },
   watch: {
@@ -61,7 +76,16 @@ export default {
       } catch (err) {
         console.log(err)
       }
-    }, 500)
+    }, 500),
+
+    searchHistory() {
+      auth.setUser('searchHistory', this.searchHistory)
+    }
+  },
+  created() {
+    if (this.searchHistory.length === 0) {
+      this.searchHistory = auth.getUser('searchHistory')
+    }
   },
   methods: {
     // 处理搜索关键字高亮
@@ -77,6 +101,13 @@ export default {
       if (!q.length) {
         return
       }
+      if (this.searchHistory) {
+        if (this.searchHistory.some(item => item === q)) {
+          const historyId = this.searchHistory.findIndex(item => item === q)
+          this.searchHistory.splice(historyId, 1)
+        }
+      }
+      this.searchHistory.unshift(q)
       this.$router.push({
         name: 'searchLenovo',
         params: {
@@ -100,5 +131,12 @@ export default {
     margin-top: 28px;
     margin-left: 20px;
   }
+}
+.headRecord {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 40px;
+  color: #ccc;
 }
 </style>

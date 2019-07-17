@@ -12,7 +12,7 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, data) {
       // toke赋值给user
-      console.log(data)
+      // console.log(data)
       state.user = data
       // toke存储到本地
       auth.setUser('user', data)

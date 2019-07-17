@@ -45,7 +45,6 @@
                   <van-icon name="cross" @click="feedbackButton(articleItem)" />
                 </div>
               </div>
-              <div></div>
             </van-cell>
           </van-list>
         </van-pull-refresh>

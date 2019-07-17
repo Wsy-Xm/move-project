@@ -115,7 +115,7 @@ export default {
     },
     // 推荐频道添加
     async headleAddChannels(item, index) {
-      console.log(item)
+      // console.log(item)
       this.channels.push(item)
       // 判断时候是登陆状态
       const { user } = this.$store.state
